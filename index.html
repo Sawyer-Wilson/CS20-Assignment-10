@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <title>API Fun</title>
+    <style>
+        h1 {
+            text-align: center;
+            margin: 60px 0px;
+            font-size: 36px;
+        }
+        p {
+            font-size: 18px;
+        }
+        #activity-idea {
+            margin: 10px 0px;
+        }
+        #activity-idea-text {
+            display: none;
+            padding: 50px 100px;
+            border: 1px solid black;
+            border-radius: 100px;
+            width: fit-content;
+            background-color: rgb(173, 216, 230, 0.5);
+            text-align: center;
+        }
+        #API-use {
+            margin: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        #select-type {
+            width: 200px;
+            padding: 5px;
+        }
+        #bored-btn {
+            width: 100px;
+            padding: 5px;
+        }
+        @media (max-width: 550px) {
+            #activity-idea-text {
+                padding: 20px 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>API Fun</h1>
+    <div id="API-use">
+        <p id="intro-text">Are you BORED?! Do you have trouble coming up with things to do?!?</p>
+        <form id="bored-form">
+            <select id="select-type">
+                <option value="none" selected disabled hidden>
+                                        Select a Type</option>
+                <option value="education">Education</option>
+                <option value="recreational">Recreational</option>
+                <option value="social">Social</option>
+                <option value="diy">DIY</option>
+                <option value="charity">Charity</option>
+                <option value="cooking">Cooking</option>
+                <option value="relaxation">Relaxation</option>
+                <option value="music">Music</option>
+                <option value="busywork">Busywork</option>
+            </select>
+            <input type="button" id="bored-btn" value="Get Activity"
+                                                onclick="getActivity()">
+        </form>
+        <div id="activity-idea">
+            <p id="activity-idea-text"></p>
+        </div>
+    </div>
+
+    <script>
+        function getActivity() {
+            if ($("#select-type").val()) {
+                type = $("#select-type").val()
+                fetch("https://www.boredapi.com/api/activity?type=" + type)
+                    .then(response => response.json())
+                    .then(json => displayActivity(json))
+                    .catch(error => console.log(error));
+            }
+        }
+
+        function displayActivity(activity) {
+            $("#activity-idea-text").html("You should ... " + activity.activity)
+            $("#activity-idea-text").css("display", "block")
+        }
+    </script>
+</body>
+</html>
