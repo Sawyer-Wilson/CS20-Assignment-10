@@ -15,6 +15,17 @@
         p {
             font-size: 18px;
         }
+        a {
+            text-decoration: none;
+            color: lightcoral;
+        }
+        a:hover {
+            color: rgb(240, 128, 128, 0.5);
+        }
+        #description {
+            margin: 30px 15px;
+            text-indent: 50px;
+        }
         #activity-idea {
             margin: 10px 0px;
         }
@@ -41,6 +52,17 @@
         #bored-btn {
             width: 100px;
             padding: 5px;
+        }
+        table {
+            border-collapse: collapse;
+            margin: 15px 30px;
+            width: 40%;
+        }
+        td {
+            border: 1px solid;
+            text-align: left;
+            padding: 5px;
+            width: 25%;
         }
         @media (max-width: 550px) {
             #activity-idea-text {
@@ -73,6 +95,32 @@
         <div id="activity-idea">
             <p id="activity-idea-text"></p>
         </div>
+        <div id="description">
+            <p>The API used in this assignment is the <a href="https://www.boredapi.com/">Bored API</a> which returns ideas of things someone could do when they are bored. In the API request, I added a type value that requests activities of a specific type. I read the type value from the select element on the form above. This API could be very helpful on a productivity website that wants to give its users ideas to do in their free time. It could also be used on a schools webpage to give students recommended educational activities. The form above uses fetch to make the API request. The example response below uses the AJAX data pattern (Does not currently work).
+            </p>
+        </div>
+        <table>
+            <tr>
+                <td>Activity: </td>
+                <td id="activity"></td>
+            </tr>
+            <tr>
+                <td>Type: </td>
+                <td id="type"></td>
+            </tr>
+            <tr>
+                <td>Participants: </td>
+                <td id="participants"></td>
+            </tr>
+            <tr>
+                <td>Price: </td>
+                <td id="price"></td>
+            </tr>
+            <tr>
+                <td>Accessibility: </td>
+                <td id="accessibility"></td>
+            </tr>
+        </table>
     </div>
 
     <script>
@@ -90,6 +138,27 @@
             $("#activity-idea-text").html("You should ... " + activity.activity)
             $("#activity-idea-text").css("display", "block")
         }
+
+        function requestData() {
+            var reqObj = new XMLHttpRequest();
+            if (! reqObj) 
+                {alert("Unable to create HTTPRequest object"); return;}
+            reqObj.onreadystatechange = getMyData();
+            reqObj.open("GET", "https://www.boredapi.com/api/activity/", true);
+            reqObj.send();
+        }
+
+        function getMyData() {
+            if ((this.readyState == 4) && (this.status == 200))
+                var data = this.responseText;
+                var info = JSON.parse(data);
+                $("#activity").html(data.activity)
+                $("#type").html(data.type)
+                $("#participants").html(data.participants)
+                $("#price").html(data.price)
+                $("#accessibility").html(data.accessibility)
+        }
+        requestData();
     </script>
 </body>
 </html>
